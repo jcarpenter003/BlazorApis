@@ -15,7 +15,8 @@ namespace WordsBlazor.Data.Service
 
         public Task<string> QueryApi(string name)
         {
-            // todo validate url
+            var isNumeric = int.TryParse(name, out _);
+            if (isNumeric) return Task.FromResult("Enter a valid name");
 
             return _summaryClient.QueryApi(name);
         }

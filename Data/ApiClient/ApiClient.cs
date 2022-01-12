@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Net;
 using System.Text.Json;
 
 namespace WordsBlazor.Data.ApiClient
@@ -16,12 +16,31 @@ namespace WordsBlazor.Data.ApiClient
 
             using (var response = await client.SendAsync(request))
             {
-                response.EnsureSuccessStatusCode();
-                var body = await response.Content.ReadAsStringAsync();
+                if(response.IsSuccessStatusCode)
+                {
+                    try
+                    {
+                        var body = await response.Content.ReadAsStringAsync();
 
-                var model = JsonSerializer.Deserialize<AgifyModel>(body);
+                        var model = JsonSerializer.Deserialize<AgifyModel>(body);
 
-                return model.Age.ToString();
+                        return model.Age.ToString();
+                    }
+                    catch (Exception ex)
+                    {
+                        return "Something went wrong";
+                    }
+                    
+                }
+                else if (response.StatusCode.Equals(HttpStatusCode.UnprocessableEntity))
+                {
+                    return "You did a bad input you silly goose";
+                }
+                else
+                {
+                    return "Something went wrong";
+                }
+               
             }
         }
     }
