@@ -5,11 +5,12 @@
 @using WordsBlazor.Data.Service;
 @inject ApiService service; 
 
-<h1>Hello, world!</h1>
+<h1>Enter your name and see how old this api thinks you are based on that</h1>
 
-<p>This is a word cloud api wrapper</p>
+<label>Enter Name:</label>
+<input @bind="name" />
 
-<button class="btn btn-primary" @onclick="CallApi">Call Word Cloud API </button>
+<button class="btn btn-primary" @onclick="CallApi">Call API </button>
 
 @if(result != null)
 {
@@ -23,6 +24,8 @@ else if(clicked)
 
 @code
 {
+    public string? name;
+
     public string? result;
 
     bool clicked = false;
@@ -30,7 +33,7 @@ else if(clicked)
     private async void CallApi()
     {
         clicked = true;
-        result = await service.QueryApi("jonathan");
+        result = await service.QueryApi(name);
         StateHasChanged();
     }
 }
