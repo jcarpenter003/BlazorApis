@@ -1,0 +1,36 @@
+﻿@page "/"
+
+<PageTitle>Index</PageTitle>
+
+@using WordsBlazor.Data.Service;
+@inject ApiService service; 
+
+<h1>Hello, world!</h1>
+
+<p>This is a word cloud api wrapper</p>
+
+<button class="btn btn-primary" @onclick="CallApi">Call Word Cloud API </button>
+
+@if(result != null)
+{
+    <br />
+    <p>Result is @result</p>
+}
+else if(clicked)
+{
+    <p>Loading..</p>
+}
+
+@code
+{
+    public string? result;
+
+    bool clicked = false;
+
+    private async void CallApi()
+    {
+        clicked = true;
+        result = await service.QueryApi("jonathan");
+        StateHasChanged();
+    }
+}
